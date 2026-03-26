@@ -1,10 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>빵집 지도</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>🍞 대전 빵지순례 ESG 지도</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.2.0/lodash.js"></script>
+    <script src="https://kit.fontawesome.com/8de5e44495.js" crossorigin="anonymous"></script>
+    <!-- 카카오 지도 API -->
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c6b4cd5b266ca1d053aaf321552ff45a"></script>
 </head>
+
 <body>
-    <h1>🍞 대전 빵집 지도</h1>
+
+<!-- 헤더 -->
+<header>
+    <div class="logo"></div>
+    <div class="search_btn"><i class="fa-solid fa-magnifying-glass"></i></div>
+</header>
+
+<!-- 검색 & 필터 -->
+<!--<section class="search-box">-->
+<!--    <input type="text" placeholder="빵집 검색...">-->
+<!--    <select>-->
+<!--        <option>ESG 전체</option>-->
+<!--        <option>높음</option>-->
+<!--        <option>보통</option>-->
+<!--    </select>-->
+<!--    <select>-->
+<!--        <option>접근성 전체</option>-->
+<!--        <option>휠체어 가능</option>-->
+<!--    </select>-->
+<!--    <button>검색</button>-->
+<!--</section>-->
+
+<!-- 메인 영역 -->
+<div class="container">
+
+    <!-- 지도 -->
+    <div id="map"></div>
+
+    <!-- 리스트 -->
+    <div class="store-list">
+
+        <div class="card">
+            <h3>성심당</h3>
+            <p>⭐ ESG 4.8 / UD 4.5</p>
+            <p>📍 대전 중구</p>
+        </div>
+
+        <div class="card">
+            <h3>하레하레</h3>
+            <p>⭐ ESG 4.2 / UD 3.9</p>
+            <p>📍 대전 서구</p>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 지도 스크립트 -->
+<script>
+    var container = document.getElementById('map');
+    var options = {
+        center: new kakao.maps.LatLng(36.3504, 127.3845), // 대전 중심
+        level: 5
+    };
+
+    var map = new kakao.maps.Map(container, options);
+
+    // 마커 예시
+    var markerPosition = new kakao.maps.LatLng(36.3504, 127.3845);
+    var marker = new kakao.maps.Marker({
+        position: markerPosition
+    });
+
+    marker.setMap(map);
+</script>
+
 </body>
 </html>
