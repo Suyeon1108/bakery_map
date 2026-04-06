@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🍞 대전 빵지순례 ESG 지도</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=746c1d1e2ca21f2adcc051e3b28faeb8"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.2.0/lodash.js"></script>
+    <script src="https://kit.fontawesome.com/8de5e44495.js" crossorigin="anonymous"></script>
+    <!-- 카카오 지도 API -->
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=746c1d1e2ca21f2adcc051e3b28faeb8"></script>
+</head>
+
+<body>
+    <div class="main_cont">
+      <div class="map_logo">
+        <img src="img/main_logo.png">
+      </div>
+
+      <div id="map"></div>
+
+      <div class="bottom_btn">
+        <div class="btn_row">
+          <button class="btn_main" onclick="location.href='page2-bakery-list.html'">
+            🥐 주변 빵집 찾기
+          </button>
+          <button class="btn_main" onclick="location.href='page4-ai-course.html'">
+            ✨ AI 빵집 코스
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var container = document.getElementById('map');
+      var options = {
+        center: new kakao.maps.LatLng(36.3270, 127.4014),
+        level: 4
+      };
+      var map = new kakao.maps.Map(container, options);
+
+      var zoomControl = new kakao.maps.ZoomControl();
+      map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+    </script>
+</body>
+</html>
