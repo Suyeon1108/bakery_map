@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>빵집 상세 정보</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://kit.fontawesome.com/8de5e44495.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=746c1d1e2ca21f2adcc051e3b28faeb8"></script>
+    <script src="js/bakery_data.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/bakery_storage.js"></script>
+    <script src="js/map_utils.js"></script>
+    <script src="js/bakery_detail.js"></script>
+</head>
+
+<body>
+    <div class="map_logo">
+        <a href="index.html">
+            <img src="img/main_logo.png">
+        </a>
+    </div>
+    <div class="detail_wrap">
+        <div id="detailMap" class="detail_map"></div>
+
+        <div class="detail_top_bar">
+<!--
+            <button class="icon_btn" onclick="goBack()">
+                <i class="fa-solid fa-angle-left"></i>
+            </button>
+-->
+        </div>
+
+        <div class="detail_card">
+            <div class="detail_title">
+                <i class="fa-solid fa-house"></i>
+                <strong id="bakeryName">빵집 이름</strong>
+            </div>
+
+            <div class="detail_address" id="bakeryAddress">주소</div>
+
+            <div class="score_row">
+                <div class="score_item">
+                    <div class="score_icon"><i class="fa-solid fa-leaf"></i></div>
+                    <div class="score_text">
+                        <div class="score_label">ESG</div>
+                        <div class="score_value" id="bakeryEsg">0.0</div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="score_item">
+                    <div class="score_icon"><i class="fa-solid fa-hand"></i></div>
+                    <div class="score_text">
+                        <div class="score_label">UD</div>
+                        <div class="score_value" id="bakeryUd">0.0</div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="score_item" id="barrierItem">
+                    <div class="score_icon" id="barrierIcon">
+                        <i class="fa-solid fa-check" id="barrierIconI"></i>
+                    </div>
+                    <div class="score_text">
+                        <div id="barrierLabel">장애인우대</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="detail_btn" onclick="location.href='cont1_0.html'">다른 빵집 보기</button>
+        </div>
+    </div>
+
+    <script>
+        var bakery = getSelectedBakery();
+
+        if (!bakery) {
+            alert("선택된 빵집 정보가 없습니다.");
+            location.href = "cont1_0.html";
+        } else {
+            renderBakeryDetail(bakery);
+            renderBakeryDetailMap("detailMap", bakery);
+        }
+    </script>
+</body>
+</html>

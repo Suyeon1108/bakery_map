@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>주변 빵집 목록</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://kit.fontawesome.com/8de5e44495.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=746c1d1e2ca21f2adcc051e3b28faeb8"></script>
+    <script src="js/bakery_data.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/bakery_storage.js"></script>
+    <script src="js/map_utils.js"></script>
+    <script src="js/bakery_map.js"></script>
+</head>
+<body>
+    <div class="map_logo">
+        <a href="index.html">
+            <img src="img/main_logo.png">
+        </a>
+    </div>
+    <div class="list_page">
+        <div id="map" class="list_map"></div>
+
+        <div class="list_summary" style="display: none;"><!--리스트를 불러오기 위한 카운트 정보 (대신 안 보이게 가려둠)-->
+            총 <span id="bakeryCount">0</span>개의 빵집
+        </div>
+        <div class="list_conts">
+            <div class="list_title">
+                <button class="back_btn" onclick="goHome()">
+                    <i class="fa-solid fa-angle-left"></i>
+                </button>
+                <strong>주변 빵집</strong>
+            </div>
+            <div class="bakery_list" id="bakeryList"></div>
+        </div>
+    </div>
+
+    <script>
+        var map = createMap("map", 36.3504, 127.3845, 4);
+        addZoomControl(map);
+
+        renderBakeryMarkers(map, bakeries);
+        renderBakeryList("bakeryList", bakeries, map, "cont1_1.html");
+    </script>
+</body>
+</html>

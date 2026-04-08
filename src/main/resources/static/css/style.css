@@ -3,10 +3,72 @@
     --orange: #E8892A;
     --green-logo: #5A8A2A;}
 
-* { margin: 0; padding: 0; box-sizing: border-box; }body { font-family: 'Noto Sans KR', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh;}.main_cont { width: 100%; max-width: 390px; min-height: 844px; background: #fff; position: relative; display: flex; flex-direction: column; border: 1px solid red;}.map_logo { position: absolute; top: 48px; left: 50%; transform: translateX(-50%); z-index: 15; max-width: 155px; width: 100%; display: flex; align-items: center; gap: 2px; pointer-events: none; white-space: nowrap; border: 1px solid red;}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Sans KR', sans-serif; display: block; justify-content: center; align-items: center; min-height: 100vh;}
+.main_cont {position: relative; width: 100%; max-width: 1200px; min-height: 100vh; background: #fff; position: relative; display: flex; flex-direction: column; border: 1px solid red;}
+.map_logo { position: fixed; top: 48px; left: 50%; transform: translateX(-50%); z-index: 9999; max-width: 155px; width: 100%; display: flex; align-items: center; gap: 2px; pointer-events: auto; white-space: nowrap; }
 .map_logo img       { width: 100%; }
-#map { width: 100%; flex: 1;}
+#map { position: relative; z-index: 1; width: 100%; flex: 1;}
 .bottom_btn { position: absolute; bottom: 0; left: 0; right: 0; padding: 16px 20px 36px; z-index: 15;}
 .btn_row { display: flex; gap: 12px; }
 .btn_main { flex: 1; background: var(--brown-btn); color: white; border: none; border-radius: 50px; padding: 18px 0; font-size: 15px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 20px rgba(91,61,30,0.5); transition: transform 0.15s; text-decoration: none; }
 .btn_main:hover { transform: translateY(-2px); }
+
+
+.bakery_list_wrap { position: absolute; left: 0; bottom: 0; width: 100%; z-index: 99; display: none; justify-content: center; background: #fff; }
+.bakery_list_title      { position: relative; display: block; width: 100%; padding: 20px; border-radius: 20px 20px 0 0; text-align: center; font-size: 26px; background: #fff; box-shadow: 0 -5px 10px 0px rgba(0, 0, 0, 0.18); }
+.back_btn               { display: block; width: 32px; height: 32px; position: absolute; top: 20px; left: 20px; font-size: 20px; border-radius: 16px; background: #754028; color: #fff; border: none; }
+.bakery_list {width: 100%;max-height: 300px;overflow-y: auto; background: #fff; }
+.bakery_item {padding: 10px 20px;border-bottom: 1px solid #eee;cursor: pointer;font-size: 15px; }
+.bakery_item:last-child {border-bottom: none; }
+.bakery_item strong {display: block;margin-bottom: 2px;font-size: 20px; }
+.bakery_item span {color: #666;font-size: 14px; }
+
+
+
+/* /디테일*/
+
+.detail_wrap        {position: relative;width: 100%;height: 100vh;overflow: hidden; }
+.detail_map         {width: 100%;height: 100vh; }
+.detail_top_bar     { position: absolute; top: 18px; left: 18px; z-index: 20; }
+.icon_btn           { width: 42px; height: 42px; border: none; border-radius: 50%; background: rgba(255,255,255,0.95); box-shadow: 0 2px 10px rgba(0,0,0,0.12); font-size: 18px; cursor: pointer; }
+.detail_card        { position: absolute; left: 0; bottom: 0; width: 100%; background: #f2efe6; border-radius: 30px 30px 0 0; padding: 30px 20px 20px; box-sizing: border-box; z-index: 10; box-shadow: 0 -4px 18px rgba(0,0,0,0.08); }
+.detail_title       {display: flex;align-items: center;gap: 10px;font-size: 28px;font-weight: 700;color: #222;padding-bottom: 7px; }
+.detail_title i     {color: var(--brown-btn);font-size: 22px; }
+.detail_address     {font-size: 15px;color: #666; }
+.score_row          { display: flex; justify-content: space-between; align-items: center; padding: 20px 0 10px; }
+.score_item         { flex: 1; text-align: center; }
+.score_icon         { width: 36px; height: 36px; border-radius: 50%; background: #6a775f; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 16px; }
+.score_icon.success { background: #59b65a; }
+.score_text         { display: inline-block; width: 100%; padding: 10px 20px; font-size: 16px; font-weight: bold; text-align: center; }
+.score_label        { width: 50%; float: left; }
+.score_value        { width: 50%; float: right; font-weight: 400; }
+.divider            { width: 1px; height: 58px; background: #bcae9a; margin: 0 10px; }
+.detail_btn         { display: block; width: 160px; margin: 0 auto; padding: 15px 20px; border: none; border-radius: 18px; background: var(--brown-btn); color: white; font-size: 19px; font-weight: 500; cursor: pointer; }
+
+
+
+/*리스트*/
+.list_page                                  { position: relative; width: 100%; min-height: 100vh; background: #f8f6f1; }
+.list_page .map_logo                        {  }
+.list_page .map_logo a                      {  }
+.list_page .map_logo a img                  {  }
+.list_page .list_map                        { width: 100%; height: 100vh; background: #ddd; }
+.list_page .list_conts                      { position: sticky; bottom: 0; left: 0; z-index: 20; display: block; align-items: center; gap: 14px; font-size: 20px; font-weight: 700; }
+.list_page .list_conts .list_title          { position: relative; display: block; width: 100%; padding: 24px 20px; border-radius: 20px 20px 0 0; text-align: center; font-size: 26px; background: #fff; box-shadow: 0 -5px 10px 0px rgba(0, 0, 0, 0.18); }
+.list_title .back_btn                       { display: block; width: 32px; height: 32px; position: absolute; top: 20px; left: 20px; font-size: 20px; border-radius: 16px; background: #754028; color: #fff; border: none; }
+
+.list_page .list_conts .back_btn            { width: 40px; height: 40px; border: none; border-radius: 50%; background: var(--brown-btn); cursor: pointer; font-size: 18px; }
+.list_page .list_conts strong               {  }
+.list_page .list_conts .bakery_list         {  }
+
+
+
+.bakery_item {background: #ffffff;padding: 18px; border-bottom: 1px solid #eee;}
+.bakery_item.active {border-color: #754028;background: #fffaf4;}
+.bakery_top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;}
+.bakery_name { font-size: 19px; font-weight: 700; color: #222; margin-bottom: 8px;}
+.bakery_address { font-size: 14px; color: #666; line-height: 1.4;}
+.bakery_score { display: flex; flex-wrap: wrap; gap: 10px; font-size: 14px; color: #8b6a45; font-weight: 700; margin-top: 10px;}
+.detail_link_btn { border: none; background: var(--brown-btn); color: white; border-radius: 12px; padding: 10px 14px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap;} 
+.detail_link_btn:hover { background: #a67c52; }
