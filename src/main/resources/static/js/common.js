@@ -11,7 +11,7 @@ function goBakeryDetail() {
 }
 
 function goAiCourse() {
-    alert("AI 빵집 코스 페이지는 추후 연결 예정입니다.");
+    location.href = "cont2_0.html";
 }
 
 function goBack() {

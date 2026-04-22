@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>AI 추천 빵집 코스</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://kit.fontawesome.com/8de5e44495.js" crossorigin="anonymous"></script>
+    <script src="/js/bakery_data.js"></script>
+    <script src="/js/ai_corse_data.js"></script>
+    
+</head>
+<body>
+    <div class="ai_page">
+        <div class="ai_header">
+            <div class="ai_logo_wrap">
+                <a href="index.html">
+                    <img src="img/main_logo.png">
+                </a>
+            </div>
+        </div>
+
+        <div class="ai_intro">
+            <div class="ai_intro_title">AI 추천 빵집 코스</div>
+            <div class="ai_intro_subtitle">AI가 추천하는 빵지순례 코스!!</div>
+        </div>
+
+        <div class="ai_course_list" id="aiCourseList"></div>
+    </div>
+
+    <!-- 데이터 먼저 -->
+    <script src="js/bakery-data.js"></script>
+    <script src="js/ai-course-data.js"></script>
+
+    <!-- 로직은 여기 -->
+    <script>
+        function getBakeryNamesByIds(ids) {
+            return ids.map(function(id) {
+                var bakery = bakeries.find(function(b) {
+                    return b.id === id;
+                });
+                return bakery ? bakery.name : "";
+            }).join(" >> ");
+        }
+
+        function renderAiCourses() {
+            var container = document.getElementById("aiCourseList");
+            container.innerHTML = "";
+
+            aiCourses.forEach(function(course) {
+                var item = document.createElement("div");
+                item.className = "ai_course_card";
+
+                var iconClass = course.type === "bus" ? "green" : "red";
+                var icon = course.type === "bus" ? "fa-bus" : "fa-car";
+
+                item.innerHTML = `
+                    <div class="ai_course_top">
+                        <div class="ai_course_icon ${iconClass}">
+                            <i class="fa-solid ${icon}"></i>
+                        </div>
+                        <div class="ai_course_title">${course.title}</div>
+                        <div class="ai_course_arrow">
+                            <i class="fa-solid fa-arrows-split-up-and-left"></i>
+                        </div>
+                    </div>
+
+                    <div class="ai_course_desc">
+                        ${getBakeryNamesByIds(course.bakeries)}
+                    </div>
+                `;
+
+                item.onclick = function() {
+                    localStorage.setItem("selectedCourse", JSON.stringify(course));
+                    location.href = "cont2_1.html";
+                };
+
+                container.appendChild(item);
+            });
+        }
+
+        // 실행
+        renderAiCourses();
+    </script>
+</body>
+</html>

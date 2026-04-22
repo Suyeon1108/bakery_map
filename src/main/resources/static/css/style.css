@@ -5,7 +5,7 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Noto Sans KR', sans-serif; display: block; justify-content: center; align-items: center; min-height: 100vh;}
-.main_cont {position: relative; width: 100%; max-width: 1200px; min-height: 100vh; background: #fff; position: relative; display: flex; flex-direction: column; border: 1px solid red;}
+.main_cont {position: relative; width: 100%; max-width: 1200px; min-height: 100vh; background: #fff; position: relative; display: flex; flex-direction: column; margin: 0 auto; }
 .map_logo { position: fixed; top: 48px; left: 50%; transform: translateX(-50%); z-index: 9999; max-width: 155px; width: 100%; display: flex; align-items: center; gap: 2px; pointer-events: auto; white-space: nowrap; }
 .map_logo img       { width: 100%; }
 #map { position: relative; z-index: 1; width: 100%; flex: 1;}
@@ -72,3 +72,204 @@ body { font-family: 'Noto Sans KR', sans-serif; display: block; justify-content:
 .bakery_score { display: flex; flex-wrap: wrap; gap: 10px; font-size: 14px; color: #8b6a45; font-weight: 700; margin-top: 10px;}
 .detail_link_btn { border: none; background: var(--brown-btn); color: white; border-radius: 12px; padding: 10px 14px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap;} 
 .detail_link_btn:hover { background: #a67c52; }
+
+
+/*cont2_0*/
+/* AI 추천 빵집 코스 페이지 */
+.ai_page { width: 100%; min-height: 100vh; background: #a57d52; overflow-x: hidden; }
+.ai_header { width: 100%; padding: 24px 20px; background: #ece7d4; border-bottom-left-radius: 26px; border-bottom-right-radius: 26px; display: flex; align-items: center; justify-content: center; }
+.ai_logo_wrap { width: 160px; display: flex; justify-content: center; align-items: center; }
+.ai_logo_wrap a { display: block; width: 100%; } 
+.ai_logo_wrap img { width: 100%; height: auto; display: block; } 
+.ai_intro { text-align: center; padding: 28px 16px 14px; } 
+.ai_intro_title { font-size: 28px; font-weight: 800; color: #fff7eb; line-height: 1.2; margin-bottom: 8px; } 
+.ai_intro_subtitle { font-size: 16px; font-weight: 500; color: #f3e5d1; line-height: 1.4; }
+.ai_course_list { padding: 8px 16px; box-sizing: border-box; overflow-y: scroll; max-height: 600px; position: absolute; bottom: 0; left: 0; width: 100%; }
+.ai_course_card { width: 100%; background: #f5f5f5; border-radius: 24px; padding: 18px 16px; box-sizing: border-box; margin-bottom: 20px; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16); cursor: pointer; }
+.ai_course_top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.ai_course_icon { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; flex-shrink: 0; }
+.ai_course_icon.green { background: #9cc95b; }
+.ai_course_icon.red { background: #d96565; }
+.ai_course_title { flex: 1; font-size: 20px; font-weight: bold; color: #222; line-height: 1.4; word-break: keep-all; }
+.ai_course_arrow { font-size: 18px; color: #111; flex-shrink: 0; }
+.ai_course_desc { font-size: 15px; color: #222; line-height: 1.55; word-break: keep-all; }
+
+
+/*cont2_1*/
+.course_detail_page {
+    width: 100%;
+    min-height: 100vh;
+    background: #e9e9e9;
+    position: relative;
+}
+
+.course_detail_map_area {
+    width: 100%;
+    height: 55vh;
+    min-height: 280px;
+}
+
+.course_detail_logo {
+    position: absolute;
+    top: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    z-index: 10;
+}
+
+.course_detail_logo a {
+    display: block;
+    width: 100%;
+}
+
+.course_detail_logo img {
+    width: 100%;
+    display: block;
+}
+
+.course_detail_card {
+    position: relative;
+    margin-top: -18px;
+    background: #f2f2f2;
+    border-radius: 28px 28px 0 0;
+    padding: 24px 22px 34px;
+    min-height: calc(45vh + 18px);
+    box-sizing: border-box;
+    z-index: 5;
+}
+
+.course_detail_title_row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding-bottom: 10px;
+}
+
+.course_detail_title_icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.course_detail_title_icon.green {
+    background: #9cc95b;
+}
+
+.course_detail_title_icon.red {
+    background: #d96565;
+}
+
+.course_detail_title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #111;
+    line-height: 1.3;
+    word-break: keep-all;
+}
+
+.course_detail_desc {
+    text-align: center;
+    font-size: 14px;
+    color: #222;
+    line-height: 1.55;
+    word-break: keep-all; padding: 10px 0 14px; border-top: 1px dotted #a67c52;
+}
+
+.course_step_list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-bottom: 20px;
+}
+
+.course_step_item {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+    padding-bottom: 5px;
+}
+
+.course_step_place {
+    display: block; width: auto;
+    font-size: 14px;
+    color: #111;
+    line-height: 1.3;
+    word-break: keep-all;
+}
+
+.course_step_place.right {
+    text-align: right;
+}
+
+.course_step_middle {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.route_badge {
+    position: relative;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 800;
+    padding-bottom: 6px;
+}
+
+.route_badge::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 4px;
+    border-radius: 999px;
+}
+
+.route_badge.walk {
+    color: #1b9cff;
+}
+
+.route_badge.walk::after {
+    background: #1b9cff;
+}
+
+.route_badge.bus {
+    color: #ff2d2d;
+}
+
+.route_badge.bus::after {
+    background: #ff2d2d;
+}
+
+.route_badge.car {
+    color: #ff8a00;
+}
+
+.route_badge.car::after {
+    background: #ff8a00;
+}
+
+.course_detail_btn {
+    display: block;
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+    border: none;
+    border-radius: 18px;
+    background: #a67c52;
+    color: #fff9ef;
+    font-size: 17px;
+    font-weight: 800;
+    padding: 18px 16px;
+    cursor: pointer;
+}

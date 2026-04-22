@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko"><!--이동시간도 데이터로 받을 수 있게 해야함-->
+<head>
+    <title>AI 추천 코스 상세</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://kit.fontawesome.com/8de5e44495.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=746c1d1e2ca21f2adcc051e3b28faeb8"></script>
+</head>
+
+<body>
+    <div class="course_detail_page">
+        <!-- 실제 카카오맵 영역 -->
+        <div id="courseMap" class="course_detail_map_area"></div>
+
+        <!-- 로고 -->
+        <div class="course_detail_logo">
+            <a href="index.html">
+                <img src="img/main_logo.png" alt="로고">
+            </a>
+        </div>
+
+        <!-- 하단 카드 -->
+        <div class="course_detail_card">
+            <div class="course_detail_title_row">
+                <div class="course_detail_title_icon" id="courseTypeIconWrap">
+                    <i class="fa-solid fa-bus" id="courseTypeIcon"></i>
+                </div>
+                <div class="course_detail_title" id="courseTitle">코스 제목</div>
+            </div>
+
+            <div class="course_detail_desc" id="courseFullPath">
+                코스 전체 경로
+            </div>
+
+            <div class="course_step_list" id="courseStepList"></div>
+
+            <button class="course_detail_btn" onclick="location.href='cont2_0.html'">
+                다른 경로 보기
+            </button>
+        </div>
+    </div>
+
+    <!-- 데이터 파일 -->
+    <script src="js/bakery_data.js"></script>
+    <script src="js/ai_course_data.js"></script>
+
+    <script>
+        function getBakeryNamesByIds(ids) {
+            return ids.map(function(id) {
+                var bakery = bakeries.find(function(b) {
+                    return b.id === id;
+                });
+                return bakery ? bakery.name : "";
+            }).filter(function(name) {
+                return name !== "";
+            }).join(" >> ");
+        }
+
+        function getBakeryById(id) {
+            return bakeries.find(function(b) {
+                return b.id === id;
+            });
+        }
+
+        function getStepColor(step) {
+            if (step.walkTime) {
+                return "#1b9cff";
+            }
+            if (step.busTime) {
+                return "#ff3b30";
+            }
+            if (step.carTime) {
+                return "#ff8a00";
+            }
+            return "#999999";
+        }
+
+        function renderCourseMap(course) {
+            var container = document.getElementById("courseMap");
+
+            var mapOption = {
+                center: new kakao.maps.LatLng(36.3504, 127.3845),
+                level: 5
+            };
+
+            var map = new kakao.maps.Map(container, mapOption);
+            var bounds = new kakao.maps.LatLngBounds();
+
+            course.bakeries.forEach(function(id, index) {
+                var bakery = getBakeryById(id);
+                if (!bakery) return;
+
+                var position = new kakao.maps.LatLng(bakery.lat, bakery.lng);
+
+                var imageSrc = "img/map_marker_" + (index + 1) + ".png";
+                var imageSize = new kakao.maps.Size(42, 56);
+                var imageOption = { offset: new kakao.maps.Point(21, 56) };
+
+                var markerImage = new kakao.maps.MarkerImage(
+                    imageSrc,
+                    imageSize,
+                    imageOption
+                );
+
+                new kakao.maps.Marker({
+                    map: map,
+                    position: position,
+                    image: markerImage
+                });
+
+                bounds.extend(position);
+            });
+
+            if (course.routeSteps && course.routeSteps.length > 0) {
+                course.routeSteps.forEach(function(step) {
+                    var fromBakery = getBakeryById(step.fromId);
+                    var toBakery = getBakeryById(step.toId);
+
+                    if (!fromBakery || !toBakery) return;
+
+                    var fromPosition = new kakao.maps.LatLng(fromBakery.lat, fromBakery.lng);
+                    var toPosition = new kakao.maps.LatLng(toBakery.lat, toBakery.lng);
+
+                    var polyline = new kakao.maps.Polyline({
+                        path: [fromPosition, toPosition],
+                        strokeWeight: 5,
+                        strokeColor: getStepColor(step),
+                        strokeOpacity: 0.95,
+                        strokeStyle: "solid"
+                    });
+
+                    polyline.setMap(map);
+                });
+            }
+
+            map.setBounds(bounds);
+        }
+
+        function renderRouteSteps(course) {
+            var stepList = document.getElementById("courseStepList");
+            stepList.innerHTML = "";
+
+            course.routeSteps.forEach(function(step) {
+                var fromBakery = getBakeryById(step.fromId);
+                var toBakery = getBakeryById(step.toId);
+
+                if (!fromBakery || !toBakery) return;
+
+                var badges = "";
+
+                if (step.walkTime) {
+                    badges += `
+                        <div class="route_badge walk">
+                            걸어서 ${step.walkTime}분!
+                        </div>
+                    `;
+                }
+
+                if (step.busTime) {
+                    badges += `
+                        <div class="route_badge bus">
+                            버스 약 ${step.busTime}분!
+                        </div>
+                    `;
+                }
+
+                if (step.carTime) {
+                    badges += `
+                        <div class="route_badge car">
+                            차량 ${step.carTime}분!
+                        </div>
+                    `;
+                }
+
+                var item = document.createElement("div");
+                item.className = "course_step_item";
+
+                item.innerHTML = `
+                    <div class="course_step_place left">${fromBakery.name}</div>
+
+                    <div class="course_step_middle">
+                        ${badges}
+                    </div>
+
+                    <div class="course_step_place right">${toBakery.name}</div>
+                `;
+
+                stepList.appendChild(item);
+            });
+        }
+
+        function renderCourseDetail() {
+            var course = JSON.parse(localStorage.getItem("selectedCourse"));
+
+            if (!course) {
+                alert("선택한 코스 정보가 없습니다.");
+                location.href = "cont2_0.html";
+                return;
+            }
+
+            // 제목 / 전체 경로
+            document.getElementById("courseTitle").textContent = course.title;
+            document.getElementById("courseFullPath").textContent = getBakeryNamesByIds(course.bakeries);
+
+            // 아이콘 분기
+            var iconWrap = document.getElementById("courseTypeIconWrap");
+            var icon = document.getElementById("courseTypeIcon");
+
+            if (course.type === "bus") {
+                iconWrap.classList.add("green");
+                iconWrap.classList.remove("red");
+                icon.className = "fa-solid fa-bus";
+            } else {
+                iconWrap.classList.add("red");
+                iconWrap.classList.remove("green");
+                icon.className = "fa-solid fa-car";
+            }
+
+            // 지도 렌더링
+            renderCourseMap(course);
+
+            // 하단 구간 정보 렌더링
+            renderRouteSteps(course);
+        }
+
+        renderCourseDetail();
+    </script>
+</body>
+</html>
