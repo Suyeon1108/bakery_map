@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://kit.fontawesome.com/8de5e44495.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=746c1d1e2ca21f2adcc051e3b28faeb8"></script>
+    <script src="js/map.js"></script>
 </head>
 
 <body>
@@ -65,77 +66,54 @@
         }
 
         function getStepColor(step) {
-            if (step.walkTime) {
-                return "#1b9cff";
-            }
-            if (step.busTime) {
-                return "#ff3b30";
-            }
-            if (step.carTime) {
-                return "#ff8a00";
-            }
+            if (step.walkTime) return "#1b9cff";
+            if (step.busTime) return "#ff3b30";
+            if (step.carTime) return "#ff8a00";
             return "#999999";
         }
 
+        // 🔥 map.js 적용된 부분
         function renderCourseMap(course) {
-            var container = document.getElementById("courseMap");
 
-            var mapOption = {
-                center: new kakao.maps.LatLng(36.3504, 127.3845),
-                level: 5
-            };
+            var map = createBaseMap("courseMap", 36.3504, 127.3845, 3);
+            var bounds = createBounds();
 
-            var map = new kakao.maps.Map(container, mapOption);
-            var bounds = new kakao.maps.LatLngBounds();
-
+            // 마커
             course.bakeries.forEach(function(id, index) {
                 var bakery = getBakeryById(id);
                 if (!bakery) return;
 
-                var position = new kakao.maps.LatLng(bakery.lat, bakery.lng);
-
-                var imageSrc = "img/map_marker_" + (index + 1) + ".png";
-                var imageSize = new kakao.maps.Size(42, 56);
-                var imageOption = { offset: new kakao.maps.Point(21, 56) };
-
-                var markerImage = new kakao.maps.MarkerImage(
-                    imageSrc,
-                    imageSize,
-                    imageOption
+                addBasicMarker(
+                    map,
+                    bakery.lat,
+                    bakery.lng,
+                    "img/map_marker_" + (index + 1) + ".png"
                 );
 
-                new kakao.maps.Marker({
-                    map: map,
-                    position: position,
-                    image: markerImage
-                });
-
-                bounds.extend(position);
+                extendBounds(bounds, bakery.lat, bakery.lng);
             });
 
+            // 경로
             if (course.routeSteps && course.routeSteps.length > 0) {
                 course.routeSteps.forEach(function(step) {
+
                     var fromBakery = getBakeryById(step.fromId);
                     var toBakery = getBakeryById(step.toId);
 
                     if (!fromBakery || !toBakery) return;
 
-                    var fromPosition = new kakao.maps.LatLng(fromBakery.lat, fromBakery.lng);
-                    var toPosition = new kakao.maps.LatLng(toBakery.lat, toBakery.lng);
-
-                    var polyline = new kakao.maps.Polyline({
-                        path: [fromPosition, toPosition],
-                        strokeWeight: 5,
-                        strokeColor: getStepColor(step),
-                        strokeOpacity: 0.95,
-                        strokeStyle: "solid"
-                    });
-
-                    polyline.setMap(map);
+                    drawLine(
+                        map,
+                        fromBakery.lat,
+                        fromBakery.lng,
+                        toBakery.lat,
+                        toBakery.lng,
+                        getStepColor(step)
+                    );
                 });
             }
 
-            map.setBounds(bounds);
+            setMapBounds(map, bounds);
         }
 
         function renderRouteSteps(course) {
@@ -151,27 +129,15 @@
                 var badges = "";
 
                 if (step.walkTime) {
-                    badges += `
-                        <div class="route_badge walk">
-                            걸어서 ${step.walkTime}분!
-                        </div>
-                    `;
+                    badges += `<div class="route_badge walk">걸어서 ${step.walkTime}분!</div>`;
                 }
 
                 if (step.busTime) {
-                    badges += `
-                        <div class="route_badge bus">
-                            버스 약 ${step.busTime}분!
-                        </div>
-                    `;
+                    badges += `<div class="route_badge bus">버스 약 ${step.busTime}분!</div>`;
                 }
 
                 if (step.carTime) {
-                    badges += `
-                        <div class="route_badge car">
-                            차량 ${step.carTime}분!
-                        </div>
-                    `;
+                    badges += `<div class="route_badge car">차량 ${step.carTime}분!</div>`;
                 }
 
                 var item = document.createElement("div");
@@ -179,11 +145,7 @@
 
                 item.innerHTML = `
                     <div class="course_step_place left">${fromBakery.name}</div>
-
-                    <div class="course_step_middle">
-                        ${badges}
-                    </div>
-
+                    <div class="course_step_middle">${badges}</div>
                     <div class="course_step_place right">${toBakery.name}</div>
                 `;
 
@@ -200,28 +162,22 @@
                 return;
             }
 
-            // 제목 / 전체 경로
             document.getElementById("courseTitle").textContent = course.title;
-            document.getElementById("courseFullPath").textContent = getBakeryNamesByIds(course.bakeries);
+            document.getElementById("courseFullPath").textContent =
+                getBakeryNamesByIds(course.bakeries);
 
-            // 아이콘 분기
             var iconWrap = document.getElementById("courseTypeIconWrap");
             var icon = document.getElementById("courseTypeIcon");
 
             if (course.type === "bus") {
                 iconWrap.classList.add("green");
-                iconWrap.classList.remove("red");
                 icon.className = "fa-solid fa-bus";
             } else {
                 iconWrap.classList.add("red");
-                iconWrap.classList.remove("green");
                 icon.className = "fa-solid fa-car";
             }
 
-            // 지도 렌더링
             renderCourseMap(course);
-
-            // 하단 구간 정보 렌더링
             renderRouteSteps(course);
         }
 
