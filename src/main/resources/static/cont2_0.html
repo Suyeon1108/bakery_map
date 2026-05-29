@@ -1,87 +1,72 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <title>AI 추천 빵집 코스</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="https://kit.fontawesome.com/8de5e44495.js" crossorigin="anonymous"></script>
-    <script src="js/map.js"></script>
-    <script src="/js/bakery_data.js"></script>
-    <script src="/js/ai_corse_data.js"></script>
-    
-</head>
-<body>
-    <div class="ai_page">
-        <div class="ai_header">
-            <div class="ai_logo_wrap">
-                <a href="index.html">
-                    <img src="img/main_logo.png">
-                </a>
+<html>
+    <head>
+        <title>AI 코스 추천</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="css/style.css">
+        <script src="https://kit.fontawesome.com/8de5e44495.js" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=746c1d1e2ca21f2adcc051e3b28faeb8"></script>
+        <script src="js/map.js"></script>
+        <script src="js/bakery_data.js"></script>
+        <script src="js/common.js"></script>
+        <script src="js/bakery_storage.js"></script>
+        <script src="js/map_utils.js"></script>
+        <script src="js/bakery_detail.js"></script>
+    </head>
+    <body>
+
+        <div class="cont2_container">
+
+            <div class="cont2_hd">
+                <div class="logo"><a href="index.html"><img src="../img/main_logo.png"></a></div>
+                <div class="title_t">
+                    <strong>AI 추천 빵집 코스</strong>
+                    <span>원하는 조건에 맞춰 AI가 맞춤 코스를 추천합니다!</span>
+                </div>
             </div>
+
+            <div class="cate_list">
+                <div class="cate_li_title">원하는 카테고리를 모두 선택해주세요</div>
+                <div class="grid">
+                    <li><div class="item" data-key="parking">주차장</div></li>
+                    <li><div class="item" data-key="barrier_free">배리어프리</div></li>
+                    <li><div class="item" data-key="ramp">경사로</div></li>
+                    <li><div class="item" data-key="braille">점자</div></li>
+                    <li><div class="item" data-key="stroller">유모차</div></li>
+                    <li><div class="item" data-key="nursing_room">수유실</div></li>
+                    <li><div class="item" data-key="kids_zone">키즈존</div></li>
+                    <li><div class="item" data-key="wheelchair">휠체어</div></li>
+                    <li><div class="item" data-key="disabled">장애인</div></li>
+                    <li><div class="item" data-key="restroom">화장실</div></li>
+                    <li><div class="item" data-key="seating">좌석</div></li>
+                    <li><div class="item" data-key="elevator">엘리베이터</div></li>
+                </div>
+
+                <div class="bottom">
+                    <button class="btn primary" onclick="goNext()">선택완료</button>
+                    <button class="btn secondary" onclick="location.href='index.html'">메인으로 돌아가기</button>
+                </div>
+            </div>
+
         </div>
 
-        <div class="ai_intro">
-            <div class="ai_intro_title">AI 추천 빵집 코스</div>
-            <div class="ai_intro_subtitle">AI가 추천하는 빵지순례 코스!!</div>
-        </div>
+        <script>
+        let selected = {};
 
-        <div class="ai_course_list" id="aiCourseList"></div>
-    </div>
+        document.querySelectorAll(".item").forEach(el => {
+            el.onclick = () => {
+                el.classList.toggle("active");
+                const key = el.dataset.key;
+                selected[key] = selected[key] ? 0 : 1;
+            };
+        });
 
-    <!-- 데이터 먼저 -->
-    <script src="js/bakery-data.js"></script>
-    <script src="js/ai-course-data.js"></script>
-
-    <!-- 로직은 여기 -->
-    <script>
-        function getBakeryNamesByIds(ids) {
-            return ids.map(function(id) {
-                var bakery = bakeries.find(function(b) {
-                    return b.id === id;
-                });
-                return bakery ? bakery.name : "";
-            }).join(" >> ");
+        function goNext() {
+            localStorage.setItem("filters", JSON.stringify(selected));
+            location.href = "cont2_1.html";
         }
+        </script>
 
-        function renderAiCourses() {
-            var container = document.getElementById("aiCourseList");
-            container.innerHTML = "";
-
-            aiCourses.forEach(function(course) {
-                var item = document.createElement("div");
-                item.className = "ai_course_card";
-
-                var iconClass = course.type === "bus" ? "green" : "red";
-                var icon = course.type === "bus" ? "fa-bus" : "fa-car";
-
-                item.innerHTML = `
-                    <div class="ai_course_top">
-                        <div class="ai_course_icon ${iconClass}">
-                            <i class="fa-solid ${icon}"></i>
-                        </div>
-                        <div class="ai_course_title">${course.title}</div>
-                        <div class="ai_course_arrow">
-                            <i class="fa-solid fa-arrows-split-up-and-left"></i>
-                        </div>
-                    </div>
-
-                    <div class="ai_course_desc">
-                        ${getBakeryNamesByIds(course.bakeries)}
-                    </div>
-                `;
-
-                item.onclick = function() {
-                    localStorage.setItem("selectedCourse", JSON.stringify(course));
-                    location.href = "cont2_1.html";
-                };
-
-                container.appendChild(item);
-            });
-        }
-
-        // 실행
-        renderAiCourses();
-    </script>
-</body>
+    </body>
 </html>

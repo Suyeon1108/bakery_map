@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AI 코스 추천</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="css/style.css">
+        <script src="https://kit.fontawesome.com/8de5e44495.js" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=746c1d1e2ca21f2adcc051e3b28faeb8"></script>
+        <script src="js/map.js"></script>
+        <script src="js/bakery_data.js"></script>
+        <script src="js/common.js"></script>
+        <script src="js/bakery_storage.js"></script>
+        <script src="js/map_utils.js"></script>
+        <script src="js/bakery_detail.js"></script>
+    </head>
+    <body>
+
+        <div class="cont2_container">
+
+            <div class="cont2_hd">
+                <div class="logo"><a href="index.html"><img src="../img/main_logo.png"></a></div>
+                <div class="title_t">
+                    <strong>AI 추천 빵집 코스</strong>
+                    <span>원하는 조건에 맞춰 AI가 맞춤 코스를 추천합니다!</span>
+                </div>
+            </div>
+            <div class="cate_list">
+                <div class="cate_li_title">AI가 코스 추천을 완료했습니다!</div>
+                <div id="result"></div>
+
+                <button class="btn secondary" onclick="location.href='cont2_0.html'">다시 선택하기</button>
+            </div>
+        </div>
+<script>
+async function loadData() {
+    const filters = JSON.parse(localStorage.getItem("filters")) || {};
+    const transport = localStorage.getItem("transport") || "bus";
+
+    let query = Object.entries(filters)
+        .filter(([k,v]) => v === 1)
+        .map(([k,v]) => `${k}=1`)
+        .join("&");
+
+    const res = await fetch(`http://43.201.14.82:8080/bakery/course/recommend?${query}`);
+    const data = await res.json();
+
+    const box = document.getElementById("result");
+
+    for (const course of data) {
+
+        // 👉 코스 상세 조회 (빵집 목록 가져오기)
+        const detailRes = await fetch(`http://43.201.14.82:8080/bakery/course/${course.id}`);
+        const bakeries = await detailRes.json();
+
+        const names = bakeries.map(b => b.name).join(" - ");
+
+        const iconClass = transport === 'bus' ? 'transport-bus' : 'transport-car';
+        const iconImg = transport === 'bus' ? '/img/bus_icon.png' : '/img/car_icon.png';
+        
+        const div = document.createElement("div");
+        div.className = "course-card";
+
+        div.innerHTML = `
+            <div class="course-info">
+            <div class="course-title">
+                <div class="title_t">${course.name}</div>
+                <div class="transport-icon ${iconClass}">
+                    <img src="${iconImg}">
+                </div>
+            </div>
+                <div class="course-desc">${names}</div>
+            </div>
+
+            <div class="map-btn" onclick="goMap(${course.id})">
+                <img src="/img/route_icon.png">
+            </div>
+        `;
+
+        box.appendChild(div);
+    }
+}
+
+function goMap(courseId) {
+    const transport = localStorage.getItem("transport");
+
+    // 👉 나중에 OSRM 연결
+    location.href = `map.html?courseId=${courseId}&transport=${transport}`;
+}
+
+loadData();
+</script>
