@@ -3,39 +3,38 @@
     --orange: #E8892A;
     --green-logo: #5A8A2A;}
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; display: block; justify-content: center; align-items: center; min-height: 100vh;}
-.main_cont {position: relative; width: 100%; max-width: 1200px; min-height: 100vh; background: #fff; position: relative; display: flex; flex-direction: column; margin: 0 auto; }
-.map_logo { position: fixed; top: 48px; left: 50%; transform: translateX(-50%); z-index: 9999; max-width: 155px; width: 100%; display: flex; align-items: center; gap: 2px; pointer-events: auto; white-space: nowrap; }
+*                   { margin: 0; padding: 0; box-sizing: border-box; }
+body                { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; display: block; justify-content: center; align-items: center; min-height: 100vh;}
+.main_cont          {position: relative; width: 100%; max-width: 1200px; min-height: 100vh; background: #fff; position: relative; display: flex; flex-direction: column; margin: 0 auto; }
+.map_logo           { position: fixed; top: 48px; left: 50%; transform: translateX(-50%); z-index: 9999; max-width: 155px; width: 100%; display: flex; align-items: center; gap: 2px; pointer-events: auto; white-space: nowrap; }
 .map_logo img       { width: 100%; }
-#map { position: relative; z-index: 1; width: 100%; flex: 1;}
-.bottom_btn { position: absolute; bottom: 0; left: 0; right: 0; padding: 16px 20px 36px; z-index: 15;}
-.btn_row { display: flex; gap: 12px; }
-.btn_main { flex: 1; background: var(--brown-btn); color: white; border: none; border-radius: 50px; padding: 18px 0; font-size: 15px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 20px rgba(91,61,30,0.5); transition: transform 0.15s; text-decoration: none; }
-.btn_main:hover { transform: translateY(-2px); }
+#map                { position: relative; z-index: 1; width: 100%; flex: 1;}
+.bottom_btn         { position: absolute; bottom: 0; left: 0; right: 0; padding: 16px 20px 36px; z-index: 15;}
+.btn_row            { display: flex; gap: 12px; }
+.btn_main           { flex: 1; background: var(--brown-btn); color: white; border: none; border-radius: 50px; padding: 18px 0; font-size: 15px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 20px rgba(91,61,30,0.5); transition: transform 0.15s; text-decoration: none; }
+.btn_main:hover     { transform: translateY(-2px); }
 
 
-.bakery_list_wrap { position: absolute; left: 0; bottom: 0; width: 100%; z-index: 99; display: none; justify-content: center; background: #fff; }
+.bakery_list_wrap       { position: absolute; left: 0; bottom: 0; width: 100%; z-index: 99; display: none; justify-content: center; background: #fff; }
 .bakery_list_title      { position: relative; display: block; width: 100%; padding: 20px; border-radius: 20px 20px 0 0; text-align: center; font-size: 26px; background: #fff; box-shadow: 0 -5px 10px 0px rgba(0, 0, 0, 0.18); }
 .back_btn               { display: block; width: 32px; height: 32px; position: absolute; top: 20px; left: 20px; font-size: 20px; border-radius: 16px; background: #754028; color: #fff; border: none; }
-.bakery_list {width: 100%;max-height: 300px;overflow-y: auto; background: #fff; }
-.bakery_item {padding: 10px 20px;border-bottom: 1px solid #eee;cursor: pointer;font-size: 15px; }
-.bakery_item:last-child {border-bottom: none; }
-.bakery_item strong {display: block;margin-bottom: 2px;font-size: 20px; }
-.bakery_item span {color: #666;font-size: 14px; }
+.bakery_list            { width: 100%; max-height: 300px;overflow-y: auto; background: #fff; }
+.bakery_item            { padding: 10px 20px; border-bottom: 1px solid #eee;cursor: pointer;font-size: 15px; }
+.bakery_item:last-child { border-bottom: none; }
+.bakery_item strong     { display: block; margin-bottom: 2px;font-size: 20px; }
+.bakery_item span       { color: #666; font-size: 14px; }
 
 
 
 /* /디테일*/
-
-.detail_wrap        {position: relative;width: 100%;height: 100vh;overflow: hidden; }
-.detail_map         {width: 100%;height: 100vh; }
+.detail_wrap        { position: relative;width: 100%;height: 100vh;overflow: hidden; }
+.detail_map         { width: 100%;height: 100vh; }
 .detail_top_bar     { position: absolute; top: 18px; left: 18px; z-index: 20; }
 .icon_btn           { width: 42px; height: 42px; border: none; border-radius: 50%; background: rgba(255,255,255,0.95); box-shadow: 0 2px 10px rgba(0,0,0,0.12); font-size: 18px; cursor: pointer; }
 .detail_card        { position: absolute; left: 0; bottom: 0; width: 100%; background: #f2efe6; border-radius: 30px 30px 0 0; padding: 30px 20px 20px; box-sizing: border-box; z-index: 10; box-shadow: 0 -4px 18px rgba(0,0,0,0.08); }
-.detail_title       {display: flex;align-items: center;gap: 10px;font-size: 28px;font-weight: 700;color: #222;padding-bottom: 7px; }
-.detail_title i     {color: var(--brown-btn);font-size: 22px; }
-.detail_address     {font-size: 15px;color: #666; }
+.detail_title       { display: flex; align-items: center;gap: 10px;font-size: 28px;font-weight: 700;color: #222;padding-bottom: 7px; }
+.detail_title i     { color: var(--brown-btn);font-size: 22px; }
+.detail_address     { font-size: 15px; color: #666; }
 .score_row          { display: flex; justify-content: space-between; align-items: center; padding: 20px 0 10px; }
 .score_item         { flex: 1; text-align: center; }
 .score_icon         { width: 36px; height: 36px; border-radius: 50%; background: #6a775f; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 16px; }
@@ -64,71 +63,46 @@ body { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; display: 
 
 
 
-.bakery_item {background: #ffffff;padding: 18px; border-bottom: 1px solid #eee;}
-.bakery_item.active {border-color: #754028;background: #fffaf4;}
-.bakery_top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;}
-.bakery_name { font-size: 19px; font-weight: 700; color: #222; margin-bottom: 8px;}
-.bakery_address { font-size: 14px; color: #666; line-height: 1.4;}
-.bakery_score { display: flex; flex-wrap: wrap; gap: 10px; font-size: 14px; color: #8b6a45; font-weight: 700; margin-top: 10px;}
-.detail_link_btn { border: none; background: var(--brown-btn); color: white; border-radius: 12px; padding: 10px 14px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap;} 
-.detail_link_btn:hover { background: #a67c52; }
+.bakery_item                { background: #ffffff;padding: 18px; border-bottom: 1px solid #eee;}
+.bakery_item.active         { border-color: #754028;background: #fffaf4;}
+.bakery_top                 { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;}
+.bakery_name                { font-size: 19px; font-weight: 700; color: #222; margin-bottom: 8px;}
+.bakery_address             { font-size: 14px; color: #666; line-height: 1.4;}
+.bakery_score               { display: flex; flex-wrap: wrap; gap: 10px; font-size: 14px; color: #8b6a45; font-weight: 700; margin-top: 10px;}
+.detail_link_btn            { border: none; background: var(--brown-btn); color: white; border-radius: 12px; padding: 10px 14px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap;} 
+.detail_link_btn:hover      { background: #a67c52; }
+
 
 
 /*cont2_0*/
 /* AI 추천 빵집 코스 페이지 */
-.cont2_container { text-align: center; background: #9B7752; float: left; width: 100%; max-width: 1200px; height: 100vh; }
+.cont2_container                    { text-align: center; background: #9B7752; float: left; width: 100%; max-width: 1200px; height: 100vh; }
 
-
-.cont2_hd { display: block; background: #FFFDF2; padding: 50px 20px 30px; border-radius: 0 0 40px 40px; text-align: left; }
-.cont2_hd .logo { display: block; width: 100%; max-width: 80px; }
-.cont2_hd .logo img { display: block; width: 100%; }
-.cont2_hd strong { display: block; width: 100%; font-size: 24px; font-weight: bold; color: #78542E; }
-.cont2_hd span { display: block; width: 100%; font-size: 15px; font-weight: 400; color: #907252; } 
-.cate_list { width: auto; text-align: center; padding: 20px 20px 0; }
-.cate_list .cate_li_title { display: block; width: 100%; padding: 30px 0; font-size: 20px;font-weight: bold; color: #FFFDF2;}
+.cont2_hd                           { display: block; background: #FFFDF2; padding: 50px 20px 30px; border-radius: 0 0 40px 40px; text-align: left; }
+.cont2_hd .logo                     { display: block; width: 100%; max-width: 80px; }
+.cont2_hd .logo img                 { display: block; width: 100%; }
+.cont2_hd strong                    { display: block; width: 100%; font-size: 24px; font-weight: bold; color: #78542E; }
+.cont2_hd span                      { display: block; width: 100%; font-size: 15px; font-weight: 400; color: #907252; } 
+.cate_list                          { width: auto; text-align: center; padding: 20px 20px 0; }
+.cate_list .cate_li_title           { display: block; width: 100%; padding: 30px 0; font-size: 20px;font-weight: bold; color: #FFFDF2;}
 /* 그리드 */
-.grid {  display: block; width: 100%; padding: 0; text-align: center; display: inline-block; zoom: 1; }
-.grid li { list-style: none; display: inline-flex;justify-content: center;align-items: center;width: auto;height: auto;margin: 13px 10px; }
-.item { text-align: center; font-size: 15px; font-weight: 400; color: #444; background: #BFA78C; padding: 10px 20px; border-radius: 25px; cursor: pointer; transition: 0.3s; line-height: 1; }
+.grid                               {  display: block; width: 100%; padding: 0; text-align: center; display: inline-block; zoom: 1; }
+.grid li                            { list-style: none; display: inline-flex;justify-content: center;align-items: center;width: auto;height: auto;margin: 10px 4px; }
+.item                               { text-align: center; font-size: 15px; font-weight: 400; color: #444; background: #BFA78C; padding: 10px 20px; border-radius: 25px; cursor: pointer; transition: 0.3s; line-height: 1; }
 
 /* 선택 상태 */
-.item.active { background: #FFFDF2; color: #4f3316; border: none; }
+.item.active                        { background: #FFFDF2; color: #4f3316; border: none; }
 
 /* 하단 버튼 */
-.bottom { margin-top: 30px; }
-.btn { display: flex; text-align: center; flex-direction: row; justify-content: center; width: 100%; padding: 16px 0; border-radius: 20px; border: none; font-size: 16px; font-weight: 500; margin-bottom: 12px; }
-.primary { background: #FFFDF2; color: #222; }
-.secondary { background: #CBB79F; }
+.bottom                             { margin-top: 30px; }
+.btn                                { display: flex; text-align: center; flex-direction: row; justify-content: center; width: 100%; padding: 16px 0; border-radius: 20px; border: none; font-size: 16px; font-weight: 500; margin-bottom: 12px; }
+.primary                            { background: #FFFDF2; color: #222; }
+.secondary                          { background: #CBB79F; }
 
-
-.cate_list .bottom .btn span  { line-height: 30px; padding-left: 8px; }
-.cate_list .bottom .btn img  { display: inline-block; width: 30px; height: 30px; border-radius: 50%; padding: 5px; }
-.cate_list .bottom .btn .bus_icon  { background: #8bc34a; }
-.cate_list .bottom .btn .car_icon  { background: #CC5C5C; }
-
-/*cont2_2*/
-.course-card { display: flex; align-items: center; justify-content: space-between; background: #FFFDF2; border-radius: 20px; padding: 20px; margin-bottom: 10px; }
-/* 왼쪽 텍스트 */
-.course-info { text-align: left; display: block; flex: 1;}
-
-.course-title { display: flex; font-size: 20px; font-weight: bold; padding-right: 10px;}
-.course-title .title_t { display: flex; padding: 4px 10px 4px 0; }
-.course-desc { font-size: 18px; }
-
-/* 가운데 아이콘 */
-.transport-icon { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-
-/* 버스 */
-.transport-bus { background: #8bc34a; /* green */ }
-/* 자동차 */
-.transport-car { background: #CC5C5C; /* red */ }
-.transport-icon img { width: 20px; }
-.transport-icon img { width: 20px; }
-
-/* 오른쪽 지도 버튼 */
-.map-btn { width: 60px; height: 60px; background: #9c7b5a; border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 1px 1px 2px 0px #492f14; }
-.map-btn img { width: 32px; }
-
+.cate_list .bottom .btn span        { line-height: 30px; padding-left: 8px; }
+.cate_list .bottom .btn img         { display: inline-block; width: 30px; height: 30px; border-radius: 50%; padding: 5px; }
+.cate_list .bottom .btn .bus_icon   { background: #8bc34a; }
+.cate_list .bottom .btn .car_icon   { background: #CC5C5C; }
 
 
 
@@ -154,180 +128,69 @@ body { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; display: 
 
 
 /*cont2_1*/
-.course_detail_page {
-    width: 100%;
-    min-height: 100vh;
-    background: #e9e9e9;
-    position: relative;
-}
+.course_detail_page                 { width: 100%; min-height: 100vh; background: #e9e9e9; position: relative; }
+.course_detail_map_area             { width: 100%; height: 55vh; min-height: 280px; }
+.course_detail_logo                 { position: absolute; top: 48px; left: 50%; transform: translateX(-50%); width: 150px; z-index: 10; }
+.course_detail_logo a               { display: block; width: 100%; }
+.course_detail_logo img             { width: 100%; display: block; }
+.course_detail_card                 { position: relative; margin-top: -18px; background: #f2f2f2; border-radius: 28px 28px 0 0; padding: 24px 22px 34px; min-height: calc(45vh + 18px); box-sizing: border-box; z-index: 5; }
+.course_detail_title_row            { display: flex; align-items: center; justify-content: center; gap: 14px; padding-bottom: 10px; }
+.course_detail_title_icon           { width: 54px; height: 54px; border-radius: 50%; color: #fff; font-size: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.course_detail_title_icon.green     { background: #9cc95b; }
+.course_detail_title_icon.red       { background: #d96565; }
+.course_detail_title                { font-size: 18px; font-weight: 800; color: #111; line-height: 1.3; word-break: keep-all; }
+.course_detail_desc                 { text-align: center; font-size: 14px; color: #222; line-height: 1.55; word-break: keep-all; padding: 10px 0 14px; border-top: 1px dotted #a67c52; }
+.course_step_list                   { display: flex; flex-direction: column; gap: 14px; padding-bottom: 20px; }
+.course_step_item                   { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; padding-bottom: 5px; }
+.course_step_place                  { display: block; width: auto; font-size: 14px; color: #111; line-height: 1.3; word-break: keep-all; }
+.course_step_place.right            { text-align: right; }
+.course_step_middle                 { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.route_badge                        { position: relative; text-align: center; font-size: 10px; font-weight: 800; padding-bottom: 6px; }
+.route_badge::after                 { content: ""; position: absolute; left: 0; bottom: 0; width: 100%; height: 4px; border-radius: 999px; }
+.route_badge.walk                   { color: #1b9cff; }
+.route_badge.walk::after            { background: #1b9cff; }
+.route_badge.bus                    { color: #ff2d2d; }
+.route_badge.bus::after             { background: #ff2d2d; }
+.route_badge.car                    { color: #ff8a00; }
+.route_badge.car::after             { background: #ff8a00; }
+.course_detail_btn                  { display: block; width: 100%; max-width: 250px; margin: 0 auto; border: none; border-radius: 18px; background: #a67c52; color: #fff9ef; font-size: 17px; font-weight: 800; padding: 18px 16px; cursor: pointer; }
 
-.course_detail_map_area {
-    width: 100%;
-    height: 55vh;
-    min-height: 280px;
-}
 
-.course_detail_logo {
-    position: absolute;
-    top: 48px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 150px;
-    z-index: 10;
-}
 
-.course_detail_logo a {
-    display: block;
-    width: 100%;
-}
 
-.course_detail_logo img {
-    width: 100%;
-    display: block;
-}
+/*cont2_2*/
+#result                     {max-height: 490px; overflow-y: scroll; margin-bottom: 16px; border-radius: 20px;}
+.course-card                { display: flex; align-items: center; justify-content: space-between; background: #FFFDF2; border-radius: 20px; padding: 20px; margin-bottom: 10px; }
+/* 왼쪽 텍스트 */
+.course-info                { text-align: left; display: block; flex: 1; padding-right: 10px; }
 
-.course_detail_card {
-    position: relative;
-    margin-top: -18px;
-    background: #f2f2f2;
-    border-radius: 28px 28px 0 0;
-    padding: 24px 22px 34px;
-    min-height: calc(45vh + 18px);
-    box-sizing: border-box;
-    z-index: 5;
-}
+.course-title               { display: flex; font-size: 17px; font-weight: bold; padding-bottom: 6px;}
+.course-title .title_t      { display: flex; padding: 4px 10px 4px 0; }
+.course-desc                { font-size: 14px; }
 
-.course_detail_title_row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    padding-bottom: 10px;
-}
+/* 가운데 아이콘 */
+.transport-icon             { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.transport-icon img         { width: 20px; }
 
-.course_detail_title_icon {
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    color: #fff;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
+/* 버스 */
+.transport-bus              { background: #8bc34a; /* green */ }
+/* 자동차 */
+.transport-car              { background: #CC5C5C; /* red */ }
 
-.course_detail_title_icon.green {
-    background: #9cc95b;
-}
+/* 오른쪽 지도 버튼 */
+.map-btn                    { width: 60px; height: 60px; background: #9c7b5a; border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 1px 1px 2px 0px #492f14; }
+.map-btn img                { width: 32px; }
 
-.course_detail_title_icon.red {
-    background: #d96565;
-}
 
-.course_detail_title {
-    font-size: 18px;
-    font-weight: 800;
-    color: #111;
-    line-height: 1.3;
-    word-break: keep-all;
+@media (max-height: 670px) and (orientation: portrait) {
+    #result { max-height: 320px }; /* 작은 폰에서는 헤더 숨김 */
 }
-
-.course_detail_desc {
-    text-align: center;
-    font-size: 14px;
-    color: #222;
-    line-height: 1.55;
-    word-break: keep-all; padding: 10px 0 14px; border-top: 1px dotted #a67c52;
-}
-
-.course_step_list {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    padding-bottom: 20px;
-}
-
-.course_step_item {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 10px;
-    padding-bottom: 5px;
-}
-
-.course_step_place {
-    display: block; width: auto;
-    font-size: 14px;
-    color: #111;
-    line-height: 1.3;
-    word-break: keep-all;
-}
-
-.course_step_place.right {
-    text-align: right;
-}
-
-.course_step_middle {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.route_badge {
-    position: relative;
-    text-align: center;
-    font-size: 10px;
-    font-weight: 800;
-    padding-bottom: 6px;
-}
-
-.route_badge::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 4px;
-    border-radius: 999px;
-}
-
-.route_badge.walk {
-    color: #1b9cff;
-}
-
-.route_badge.walk::after {
-    background: #1b9cff;
-}
-
-.route_badge.bus {
-    color: #ff2d2d;
-}
-
-.route_badge.bus::after {
-    background: #ff2d2d;
-}
-
-.route_badge.car {
-    color: #ff8a00;
-}
-
-.route_badge.car::after {
-    background: #ff8a00;
-}
-
-.course_detail_btn {
-    display: block;
-    width: 100%;
-    max-width: 250px;
-    margin: 0 auto;
-    border: none;
-    border-radius: 18px;
-    background: #a67c52;
-    color: #fff9ef;
-    font-size: 17px;
-    font-weight: 800;
-    padding: 18px 16px;
-    cursor: pointer;
+@media (max-height: 670px) and (max-width: 380px){
+    .course-card        { padding: 10px; }
+    .course-desc        { font-size: 13px; width: 210px; /* 적용할 너비 지정 */ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .course-title       { font-size: 15px; }
+    .transport-icon     { width: 25px; height: 25px; }
+    .transport-icon img { width: 20px; }
+    .map-btn            { width: 50px; height: 50px; border-radius: 15px; }
+    
 }
