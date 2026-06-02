@@ -32,17 +32,46 @@
                     <i class="fa-solid fa-angle-left"></i>
                 </button>
                 <strong>주변 빵집</strong>
+                
+                
+                <div class="bakery-search-area">
+                  <input
+                    type="text"
+                    id="bakerySearchInput"
+                    placeholder="빵집 이름 또는 주소를 입력하세요"
+                  />
+
+                  <button id="bakerySearchBtn">
+                    검색완료
+                  </button>
+
+                  <button id="bakeryResetBtn">
+                    전체보기
+                  </button>
+                </div>
+                
+                
+                
             </div>
             <div class="bakery_list" id="bakeryList"></div>
         </div>
     </div>
 
     <script>
+//        document.addEventListener("DOMContentLoaded", function () {
+//          initMap();
+//          loadNearbyBakeries();
+//          setupSearchModal();
+//        });
+        
         var map = createBaseMap("map", 36.3504, 127.3845, 3);
         addZoomControl(map);
 
         renderBakeryMarkers(map, bakeries);
         renderBakeryList("bakeryList", bakeries, map, "cont1_1.html");
+        
+        
     </script>
+    <script src="/js/bakery_search.js"></script>
 </body>
 </html>

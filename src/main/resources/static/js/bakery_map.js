@@ -58,51 +58,9 @@ function renderBakeryList(listId, bakeries, map, detailPage) {
         count.textContent = bakeries.length;
     }
 
-    bakeries.forEach(function(bakery, index) {
-        var item = document.createElement("div");
-        item.className = "bakery_item";
 
-        item.innerHTML = `
-            <div class="bakery_top">
-                <div>
-                    <div class="bakery_name">${bakery.name}</div>
-                    <div class="bakery_address">${bakery.address}</div>
-                </div>
-                <button class="detail_link_btn" data-id="${bakery.id}">
-                    상세보기
-                </button>
-            </div>
-        `;
 
-        item.onclick = function(e) {
-            if (e.target.classList.contains("detail_link_btn")) {
-                return;
-            }
 
-            moveMap(map, bakery.lat, bakery.lng, 2);
-            closeAllBakeryInfoWindows();
-
-            if (bakeryInfoWindows[index] && bakeryMarkers[index]) {
-                bakeryInfoWindows[index].open(map, bakeryMarkers[index]);
-            }
-
-            document.querySelectorAll(".bakery_item").forEach(function(el) {
-                el.classList.remove("active");
-            });
-
-            item.classList.add("active");
-        };
-
-        var detailBtn = item.querySelector(".detail_link_btn");
-        detailBtn.onclick = function(e) {
-            e.stopPropagation();
-            setSelectedBakery(bakery);
-            location.href = detailPage || "cont1_1.html";
-        };
-
-        list.appendChild(item);
-    });
-}
 
 function showCurrentLocation(map, options) {
     if (!navigator.geolocation) return;
