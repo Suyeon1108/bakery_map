@@ -43,3 +43,8 @@ server.log
 # OSRM
 *.osm
 *.osrm*
+*.osm
+*.osrm*
+*.log
+nohup.out
+server.log
