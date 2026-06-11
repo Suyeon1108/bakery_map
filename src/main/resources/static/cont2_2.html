@@ -42,7 +42,7 @@ async function loadData() {
         .map(([k,v]) => `${k}=1`)
         .join("&");
 
-    const res = await fetch(`http://43.201.14.82:8080/bakery/course/recommend?${query}`);
+    const res = await fetch(`http://3.38.97.68:8080/bakery/course/recommend?${query}`);
     const data = await res.json();
 
     const box = document.getElementById("result");
@@ -50,7 +50,7 @@ async function loadData() {
     for (const course of data) {
 
         // 👉 코스 상세 조회 (빵집 목록 가져오기)
-        const detailRes = await fetch(`http://43.201.14.82:8080/bakery/course/${course.id}`);
+        const detailRes = await fetch(`http://3.38.97.68:8080/bakery/course/${course.id}`);
         const bakeries = await detailRes.json();
 
         const names = bakeries.map(b => b.name).join(" - ");
@@ -72,7 +72,7 @@ async function loadData() {
                 <div class="course-desc">${names}</div>
             </div>
 
-            <div class="map-btn" onclick="goMap(${course.id})">
+	    <div class="map-btn" onclick="goMap(${course.id}, '${course.name}')">
                 <img src="/img/route_icon.png">
             </div>
         `;
@@ -81,11 +81,13 @@ async function loadData() {
     }
 }
 
-function goMap(courseId) {
-    const transport = localStorage.getItem("transport");
+function goMap(courseId, courseName) {
+    const transport = localStorage.getItem("transport") || "bus";
 
-    // 👉 나중에 OSRM 연결
-    location.href = `map.html?courseId=${courseId}&transport=${transport}`;
+    localStorage.setItem(`courseName_${courseId}`, courseName);
+    localStorage.setItem("selectedCourseName", courseName);
+
+    location.href = `cont2_3.html?courseId=${courseId}&transport=${transport}`;
 }
 
 loadData();

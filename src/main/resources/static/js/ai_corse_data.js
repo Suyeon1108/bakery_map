@@ -1,4 +1,4 @@
-const aiCourses = [
+const courses = [
     {
         id: 1,
         title: "대전 유명 빵집 코스",

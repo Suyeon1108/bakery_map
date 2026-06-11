@@ -26,7 +26,7 @@ function initMap() {
 
 async function loadBakeries() {
   try {
-    const response = await fetch("http://43.201.14.82:8080/bakery/list");
+    const response = await fetch("http://3.38.97.68:8080/bakery/list");
     allBakeries = await response.json();
 
     getUserLocation();

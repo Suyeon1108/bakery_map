@@ -35,3 +35,11 @@ out/
 
 ### VS Code ###
 .vscode/
+# logs
+*.log
+nohup.out
+server.log
+
+# OSRM
+*.osm
+*.osrm*

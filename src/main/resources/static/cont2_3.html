@@ -1,187 +1,301 @@
-<!DOCTYPE html>
-<html lang="ko"><!--이동시간도 데이터로 받을 수 있게 해야함-->
+<!DOCTYPE html> 
+<html lang="ko"> 
 <head>
-    <title>AI 추천 코스 상세</title>
+    <meta charset="utf-8">
+    <title>코스 상세</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://kit.fontawesome.com/8de5e44495.js" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=746c1d1e2ca21f2adcc051e3b28faeb8"></script>
     <script src="js/map.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/bakery_storage.js"></script>
+    <script src="js/map_utils.js"></script>
+    <script src="js/bakery_detail.js"></script>
+
+    <script src="https://kit.fontawesome.com/8de5e44495.js"></script> 
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=746c1d1e2ca21f2adcc051e3b28faeb8&autoload=false"></script>
+    <!--<script src="js/bakery_data.js"></script>-->
+    <style> 
+        body { margin:0; font-family:sans-serif; }
+        #map { width:100%; height:60vh; }
+        .card { padding:20px; } 
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 5px; transition: opacity 0.3s; z-index: 1000; }
+        #loading {display: none;position: fixed;top: 50%;left: 50%; transform: translate(-50%, -50%);background: rgba(0, 0, 0, 0.7);color: white; padding: 10px 20px;border-radius: 5px;z-index: 1000; }
+    </style>
 </head>
 
 <body>
-    <div class="course_detail_page">
-        <!-- 실제 카카오맵 영역 -->
-        <div id="courseMap" class="course_detail_map_area"></div>
-
-        <!-- 로고 -->
-        <div class="course_detail_logo">
-            <a href="index.html">
-                <img src="img/main_logo.png" alt="로고">
-            </a>
-        </div>
-
-        <!-- 하단 카드 -->
-        <div class="course_detail_card">
-            <div class="course_detail_title_row">
-                <div class="course_detail_title_icon" id="courseTypeIconWrap">
-                    <i class="fa-solid fa-bus" id="courseTypeIcon"></i>
-                </div>
-                <div class="course_detail_title" id="courseTitle">코스 제목</div>
-            </div>
-
-            <div class="course_detail_desc" id="courseFullPath">
-                코스 전체 경로
-            </div>
-
-            <div class="course_step_list" id="courseStepList"></div>
-
-            <button class="course_detail_btn" onclick="location.href='cont2_0.html'">
-                다른 경로 보기
-            </button>
-        </div>
-    </div>
-
-    <!-- 데이터 파일 -->
-    <script src="js/bakery_data.js"></script>
-    <script src="js/ai_course_data.js"></script>
+    <div id="map"></div>
+    <div class="card"> <h2 id="title" class="course_title">코스명</h2> <div id="pathText"></div></div>
+    <div id="loading">경로를 불러오는 중...</div>
 
     <script>
-        function getBakeryNamesByIds(ids) {
-            return ids.map(function(id) {
-                var bakery = bakeries.find(function(b) {
-                    return b.id === id;
-                });
-                return bakery ? bakery.name : "";
-            }).filter(function(name) {
-                return name !== "";
-            }).join(" >> ");
+    // CONST ═══════════════════════════════════════════════════════
+    const CONFIG = {
+        BASE_URL: 'http://3.38.97.68:8080',
+        COLORS:  { car: '#2196F3', foot: '#00C851', WALK: '#9E9E9E', BUS: '#FF6D00', SUBWAY: '#9C27B0' },
+        WEIGHTS: { car: 6, foot: 6, WALK: 3, BUS: 6, SUBWAY: 6 },
+        STYLES:  { car: 'solid', foot: 'solid', WALK: 'shortdash', BUS: 'solid', SUBWAY: 'solid' },
+        MARKER_COLORS: { start: '#00C851', end: '#F44336', waypoint: '#FF9800' },
+    };
+
+    const STATE = {
+        map:       null,
+        bounds:    null,   
+        polylines: [],
+        overlays:  [],
+        course:    null,   
+    };
+
+
+    // INIT═══════════════════════════════════════════════════════
+    function initMap() {
+        STATE.map = new kakao.maps.Map(document.getElementById("map"), {
+            center: new kakao.maps.LatLng(36.35, 127.38),
+            level: 4
+        });
+        STATE.bounds = new kakao.maps.LatLngBounds();
+    }
+
+    async function init() {
+        initMap();
+
+        const params = new URLSearchParams(location.search);
+        const transport = params.get("transport") || "car";
+        const mode = transport === "bus" ? "transit" : transport;
+
+        const course = await getCourse();
+        if (!course) return;
+
+        renderText(course);
+        renderMarkers(course.bakeries);
+        renderMap(course, transport);
+    }
+
+    window.onload = function () {
+        kakao.maps.load(init);
+    };
+    
+
+    //DATA═══════════════════════════════════════════════════════ 
+    async function getCourse() {
+        const params = new URLSearchParams(location.search);
+        const courseId = params.get("courseId");
+
+        if (!courseId) {
+            alert("코스 ID가 없습니다.");
+            location.href = "cont2_0.html";
+            return null;
         }
 
-        function getBakeryById(id) {
-            return bakeries.find(function(b) {
-                return b.id === id;
-            });
+        try {
+//	    const savedCourse = JSON.parse(localStorage.getItem("selectedCourse") || "{}");
+	    const courseName =
+		localStorage.getItem(`courseName_${courseId}`) ||
+		localStorage.getItem("selectedCourseName") ||
+	        "코스명 없음";
+
+            const res = await fetch(`${CONFIG.BASE_URL}/bakery/course/${courseId}`);
+            if (!res.ok) throw new Error(`코스 상세 조회 실패: ${res.status}`);
+
+            const bakeries = await res.json();
+
+            return {
+                id: courseId,
+                name: courseName,
+                bakeries: bakeries
+            };
+
+        } catch (error) {
+            console.error("코스 데이터 불러오기 실패:", error);
+            alert("코스 정보를 불러올 수 없습니다.");
+            return null;
         }
+    }
 
-        function getStepColor(step) {
-            if (step.walkTime) return "#1b9cff";
-            if (step.busTime) return "#ff3b30";
-            if (step.carTime) return "#ff8a00";
-            return "#999999";
-        }
 
-        // 🔥 map.js 적용된 부분
-        function renderCourseMap(course) {
+    // API  ══════════════════════════════════════════════════
+    async function fetchRouteData(courseId, mode) {  
+        const url = `${CONFIG.BASE_URL}/api/courses/${courseId}/route?mode=${mode}`;
+        const response = await fetch(url);
 
-            var map = createBaseMap("courseMap", 36.3504, 127.3845, 3);
-            var bounds = createBounds();
+        if (!response.ok) throw new Error(`서버 오류: ${response.status}`); 
+        return response.json(); 
+    }
 
-            // 마커
-            course.bakeries.forEach(function(id, index) {
-                var bakery = getBakeryById(id);
-                if (!bakery) return;
+    
+    //RENDER ══════════════════════════════════════════════════
+    function renderText(course) {
+        document.getElementById("title").innerText = course.name || '코스명 없음';
+        
+        const bakeries=Array.isArray(course.bakeries) ? course.bakeries : [];
+        document.getElementById("pathText").innerText = bakeries
+            .map(bakery => bakery.name || "이름 없음")
+            .join(" → ");
+    }
 
-                addBasicMarker(
-                    map,
-                    bakery.lat,
-                    bakery.lng,
-                    "img/map_marker_" + (index + 1) + ".png"
-                );
+    function renderMarkers(bakeries) {
+        if (!Array.isArray(bakeries)) return;
 
-                extendBounds(bounds, bakery.lat, bakery.lng);
-            });
+        bakeries.forEach((b, idx) => {
+            const lat = Number(b.lat ?? b.latitude);
+            const lng = Number(b.lng ?? b.lon ?? b.longitude);
+            const name = b.name ?? b.bakeryName ?? "이름 없음";
 
-            // 경로
-            if (course.routeSteps && course.routeSteps.length > 0) {
-                course.routeSteps.forEach(function(step) {
-
-                    var fromBakery = getBakeryById(step.fromId);
-                    var toBakery = getBakeryById(step.toId);
-
-                    if (!fromBakery || !toBakery) return;
-
-                    drawLine(
-                        map,
-                        fromBakery.lat,
-                        fromBakery.lng,
-                        toBakery.lat,
-                        toBakery.lng,
-                        getStepColor(step)
-                    );
-                });
-            }
-
-            setMapBounds(map, bounds);
-        }
-
-        function renderRouteSteps(course) {
-            var stepList = document.getElementById("courseStepList");
-            stepList.innerHTML = "";
-
-            course.routeSteps.forEach(function(step) {
-                var fromBakery = getBakeryById(step.fromId);
-                var toBakery = getBakeryById(step.toId);
-
-                if (!fromBakery || !toBakery) return;
-
-                var badges = "";
-
-                if (step.walkTime) {
-                    badges += `<div class="route_badge walk">걸어서 ${step.walkTime}분!</div>`;
-                }
-
-                if (step.busTime) {
-                    badges += `<div class="route_badge bus">버스 약 ${step.busTime}분!</div>`;
-                }
-
-                if (step.carTime) {
-                    badges += `<div class="route_badge car">차량 ${step.carTime}분!</div>`;
-                }
-
-                var item = document.createElement("div");
-                item.className = "course_step_item";
-
-                item.innerHTML = `
-                    <div class="course_step_place left">${fromBakery.name}</div>
-                    <div class="course_step_middle">${badges}</div>
-                    <div class="course_step_place right">${toBakery.name}</div>
-                `;
-
-                stepList.appendChild(item);
-            });
-        }
-
-        function renderCourseDetail() {
-            var course = JSON.parse(localStorage.getItem("selectedCourse"));
-
-            if (!course) {
-                alert("선택한 코스 정보가 없습니다.");
-                location.href = "cont2_0.html";
+            if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+                console.warn("[마커] 좌표 없음:", b);
                 return;
             }
 
-            document.getElementById("courseTitle").textContent = course.title;
-            document.getElementById("courseFullPath").textContent =
-                getBakeryNamesByIds(course.bakeries);
+            const pos = new kakao.maps.LatLng(lat, lng);
+            const isFirst = idx === 0;
+            const isLast = idx === bakeries.length - 1;
+            const type = isFirst ? "start" : isLast ? "end" : "waypoint";
 
-            var iconWrap = document.getElementById("courseTypeIconWrap");
-            var icon = document.getElementById("courseTypeIcon");
+            drawMarker(pos, name, type);
+            STATE.bounds.extend(pos);
+        });
 
-            if (course.type === "bus") {
-                iconWrap.classList.add("green");
-                icon.className = "fa-solid fa-bus";
-            } else {
-                iconWrap.classList.add("red");
-                icon.className = "fa-solid fa-car";
+        STATE.map.setBounds(STATE.bounds);
+    }
+
+    //RENDERING MAIN CODE
+    async function renderMap(course, mode) {
+        clearPolylines(); 
+
+        try {
+            showLoading(true);
+
+            const routeData = await fetchRouteData(course.id, mode);
+
+            if (mode === "bus" || mode === "transit") {
+                drawTransitRoutes(routeData);
+            } else {
+                drawOsrmRoutes(routeData, mode);
+            }
+
+            STATE.map.setBounds(STATE.bounds);
+
+        } catch (error) {
+            console.error(`renderMap: [${mode}] 경로 렌더링 실패:`, error);
+            showToast("경로를 불러오는데 실패했습니다.", "error");
+        } finally {
+            showLoading(false);
+        }
+    }
+
+
+    // CLEAR ══════════════════════════════════════════════════ 
+    function clearPolylines() {
+        STATE.polylines.forEach(p => p.setMap(null));
+        STATE.polylines = [];
+    }
+    function clearMapObjects() {
+        STATE.polylines.forEach(p => p.setMap(null));
+        STATE.overlays.forEach(o => o.setMap(null));
+        STATE.polylines = [];
+        STATE.overlays  = [];
+    }
+ 
+ 
+    // DRAW MARKER ══════════════════════════════════════════════════
+    function drawMarker(position, name, type) {
+        const color = CONFIG.MARKER_COLORS[type] ?? '#2196F3';
+        const label = { start: '출발', end: '도착', waypoint: '경유' }[type] ?? '';
+
+        const content = `
+            <div style="display:flex;flex-direction:column;align-items:center;
+                        filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
+                <div style="background:${color};color:#fff;font-size:12px;font-weight:700;
+                            padding:5px 10px;border-radius:20px;white-space:nowrap;">
+                    ${label ? `<span style="opacity:.75;margin-right:4px;">${label}</span>` : ''}${name}
+                </div>
+                <div style="width:0;height:0;border-left:6px solid transparent;
+                            border-right:6px solid transparent;
+                            border-top:8px solid ${color};"></div>
+            </div>`;
+
+        const overlay = new kakao.maps.CustomOverlay({ position, content, yAnchor: 1.0 });
+        overlay.setMap(STATE.map);
+        STATE.overlays.push(overlay);
+    }
+
+
+    // DRAW POLYLINE ══════════════════════════════════════════════════  
+    function drawOsrmRoutes(routeData, mode) {
+        routeData.segments.forEach((seg, idx) => {
+            if (!seg.polyline?.length) {
+                console.warn(`[OSRM] [${idx}]번째 구간 polyline 없음`);
+                return;
             }
+            drawPolyline(seg.polyline, mode);
+        });
+    }
 
-            renderCourseMap(course);
-            renderRouteSteps(course);
-        }
+    function drawTransitRoutes(routeData) {
+        routeData.segments.forEach((seg, segIdx) => {
+            const legs = seg?.transit?.legs;
+            if (!Array.isArray(legs)) {
+                console.warn(`[Transit] [${segIdx}]번째 구간 legs 없음`);
+                return;
+            }
+            legs.forEach(leg => {
+                if (!leg.polyline?.length) return;
+                drawPolyline(leg.polyline, leg.type);
+            });
+        });
+    }
 
-        renderCourseDetail();
+    // DRAW MAIN CODE
+    function drawPolyline(rawPolyline, type, opacity = 0.8) {
+        const path = toSafeLatLngArray(rawPolyline);
+        if (path.length < 2) return;
+    
+        const polyline = new kakao.maps.Polyline({
+            map:           STATE.map,
+            path,
+            strokeWeight:  CONFIG.WEIGHTS[type] ?? 5,
+            strokeColor:   CONFIG.COLORS[type]  ?? CONFIG.COLORS.car,
+            strokeOpacity: opacity,
+            strokeStyle:   CONFIG.STYLES[type]  ?? 'solid',
+        });
+    
+        STATE.polylines.push(polyline);
+        path.forEach(p => STATE.bounds.extend(p)); 
+    }
+
+
+    // LAT/LNG══════════════════════════════════════════════════
+    function toSafeLatLngArray(polyline) {
+        if (!polyline || !Array.isArray(polyline) || polyline.length === 0) return [];
+        return polyline
+            .filter(coord =>
+                Array.isArray(coord) &&
+                coord.length === 2 &&
+                Number.isFinite(coord[0]) &&
+                Number.isFinite(coord[1]) 
+                // coord[0] >= 33 && coord[0] <= 39 &&   // 한국 위도 범위
+                // coord[1] >= 124 && coord[1] <= 132     // 한국 경도 범위
+            )
+            .map(coord => new kakao.maps.LatLng(coord[0], coord[1]));
+    }
+
+
+    // UI══════════════════════════════════════════════════  
+    function showLoading(isLoading) {
+        document.getElementById('loading').style.display = isLoading ? 'block' : 'none';
+    }
+    function showToast(msg, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity .3s';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
     </script>
 </body>
 </html>

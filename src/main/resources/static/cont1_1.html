@@ -8,7 +8,6 @@
     <script src="https://kit.fontawesome.com/8de5e44495.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=746c1d1e2ca21f2adcc051e3b28faeb8"></script>
     <script src="js/map.js"></script>
-    <script src="js/bakery_data.js"></script>
     <script src="js/common.js"></script>
     <script src="js/bakery_storage.js"></script>
     <script src="js/map_utils.js"></script>
@@ -76,18 +75,32 @@
     </div>
 
     <script>
-        var bakery = getSelectedBakery();
+	const params = new URLSearchParams(window.location.search);
+	const bakeryId = Number(params.get("id"));
 
-        var map = createBaseMap("detailMap", bakery.lat, bakery.lng, 4);
-        addBasicMarker(map, bakery.lat, bakery.lng);
-        
-        if (!bakery) {
-            alert("선택된 빵집 정보가 없습니다.");
-            location.href = "cont1_0.html";
-        } else {
-            renderBakeryDetail(bakery);
-            renderBakeryDetailMap("detailMap", bakery);
-        }
+	if (!bakeryId) {
+	    alert("빵집 ID가 없습니다.");
+	    location.href = "cont1_0.html";
+	}
+
+	fetch("http://3.38.97.68:8080/bakery/list")
+	    .then(response => response.json())
+	    .then(bakeries => {
+	        const bakery = bakeries.find(b => Number(b.id) === bakeryId);
+
+	        if (!bakery) {
+	            alert("해당 빵집 정보를 찾을 수 없습니다.");
+	            location.href = "cont1_0.html";
+	            return;
+	        }
+
+	        renderBakeryDetail(bakery);
+	        renderBakeryDetailMap("detailMap", bakery);
+	    })
+	    .catch(error => {
+	        console.error("빵집 상세 정보 불러오기 실패:", error);
+	        alert("빵집 상세 정보를 불러오지 못했습니다.");
+	    });
     </script>
 </body>
 </html>

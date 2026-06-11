@@ -1,0 +1,79 @@
+package bakery_map.bakerymap;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.core.io.buffer.DataBufferLimitException;
+
+import org.springframework.core.codec.DecodingException;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+
+import java.util.Map;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    /** 외부 API(OSRM, ODsay) 호출 실패 */
+    @ExceptionHandler(RouteCalculationException.class)
+    public ResponseEntity<Map<String, String>> handleRouteError(
+            RouteCalculationException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_GATEWAY)
+                .body(Map.of("error", e.getMessage()));
+    }
+
+    /** 잘못된 요청 파라미터 (지원하지 않는 mode, 코스 목적지 부족 등) */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleBadRequest(
+            IllegalArgumentException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(Map.of("error", e.getMessage()));
+    }
+    // 폴리라인 버퍼 초과
+    @ExceptionHandler(DataBufferLimitException.class)
+    public ResponseEntity<Map<String, String>> handleBufferLimit(
+            DataBufferLimitException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_GATEWAY)
+                .body(Map.of("error", "경로 응답 데이터가 너무 큽니다."));
+    }
+
+
+
+
+ /** 외부 API 서버와 아예 연결이 되지 않거나 타임아웃이 발생한 경우 */
+    @ExceptionHandler(WebClientRequestException.class)
+    public ResponseEntity<Map<String, String>> handleWebClientNetworkError(WebClientRequestException e) {
+        log.error("[Network Error] 외부 API 연결 실패: {}", e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(Map.of("error", "경로 탐색 서버와의 네트워크 연결이 원활하지 않습니다."));
+    }
+    /** ODsay 등 외부 API가 JSON이 아닌 이상한 데이터(HTML 등)를 반환하여 파싱에 실패했을 때 */
+    @ExceptionHandler(DecodingException.class)
+    public ResponseEntity<Map<String, String>> handleDecodingException(DecodingException e) {
+        log.error("[Decoding Error] 외부 API 응답 파싱 실패: {}", e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_GATEWAY)
+                .body(Map.of("error", "외부 노선 API의 응답 형태가 올바르지 않습니다. (점검 중일 수 있습니다)"));
+
+    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleAllUncaughtException(Exception e) {
+        // 실제 운영 환경에서는 e.getMessage() 대신 "서버 내부 오류가 발생했습니다." 등
+        // 정제된 메시지를 보내고, 실제 에러 로그는 서버 쪽에만 남기는 것이 안전합니다.
+        log.error("[Unhandled Exception] ", e);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "서버 내부 오류가 발생했습니다.", "detail", e.getMessage()));
+    }
+}

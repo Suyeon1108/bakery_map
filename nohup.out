@@ -1,1 +1,37 @@
 Error: Unable to access jarfile build/libs/bakery_map-0.0.1-SNAPSHOT.jar
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.0.4)
+
+2026-05-04T08:22:04.584Z  INFO 225426 --- [bakery_map] [           main] bakery_map.BakeryMapApplication          : Starting BakeryMapApplication v0.0.1-SNAPSHOT using Java 21.0.10 with PID 225426 (/home/ubuntu/bakery_map/build/libs/bakery_map-0.0.1-SNAPSHOT.jar started by ubuntu in /home/ubuntu/bakery_map)
+2026-05-04T08:22:04.600Z  INFO 225426 --- [bakery_map] [           main] bakery_map.BakeryMapApplication          : No active profile set, falling back to 1 default profile: "default"
+2026-05-04T08:22:06.631Z  INFO 225426 --- [bakery_map] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-05-04T08:22:06.657Z  INFO 225426 --- [bakery_map] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-04T08:22:06.658Z  INFO 225426 --- [bakery_map] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-05-04T08:22:06.706Z  INFO 225426 --- [bakery_map] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1909 ms
+2026-05-04T08:22:06.840Z  WARN 225426 --- [bakery_map] [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'mainController' defined in URL [jar:nested:/home/ubuntu/bakery_map/build/libs/bakery_map-0.0.1-SNAPSHOT.jar/!BOOT-INF/classes/!/bakery_map/MainController.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'bakery_map.BakeryRepository' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2026-05-04T08:22:06.851Z  INFO 225426 --- [bakery_map] [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-05-04T08:22:06.893Z  INFO 225426 --- [bakery_map] [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-05-04T08:22:06.933Z ERROR 225426 --- [bakery_map] [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in bakery_map.MainController required a bean of type 'bakery_map.BakeryRepository' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'bakery_map.BakeryRepository' in your configuration.
+

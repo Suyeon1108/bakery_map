@@ -15,11 +15,11 @@ function renderBakeryDetail(bakery) {
 
     if (nameEl) nameEl.textContent = bakery.name;
     if (addressEl) addressEl.textContent = bakery.address;
-    if (esgEl) esgEl.textContent = bakery.esg;
-    if (udEl) udEl.textContent = bakery.ud;
+    if (esgEl) esgEl.textContent = bakery.esg_score ?? "-";
+    if (udEl) udEl.textContent = bakery.ud_score ?? "-";
 
     if (barrierLabel && barrierIcon && barrierIconI) {
-        if (bakery.barrierFree) {
+        if (bakery.barrier_free) {
             barrierLabel.textContent = "장애인우대";
             barrierIcon.style.background = "#59b65a";
             barrierIconI.className = "fa-solid fa-wheelchair";

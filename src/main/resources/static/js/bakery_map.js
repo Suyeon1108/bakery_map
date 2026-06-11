@@ -58,7 +58,7 @@ function renderBakeryList(listId, bakeries, map, detailPage) {
         count.textContent = bakeries.length;
     }
 
-
+}
 
 
 
@@ -82,4 +82,5 @@ function showCurrentLocation(map, options) {
     }, function() {
         console.log("위치 정보를 가져오지 못했습니다. 기본 위치로 표시합니다.");
     });
+    
 }

@@ -1,0 +1,8 @@
+osrm:
+  foot:
+    url: http://localhost:5000
+  car:
+    url: http://localhost:5001
+
+odsay:
+  api-key: 1F1sgtBIfB4Dy0+djCeT0T69nUgA2D8SkpBzLWnISEk
