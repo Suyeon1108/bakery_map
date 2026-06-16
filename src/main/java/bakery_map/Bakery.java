@@ -21,6 +21,14 @@ public class Bakery {
 
     // ===== getter/setter =====
 
+    public static Bakery ofCoord(String name, double lat, double lng) {
+        Bakery b = new Bakery();
+        b.setName(name);
+        b.setLat(lat);
+        b.setLng(lng);
+        return b;
+    }
+
     public Integer getId() { return id; }
 
     public String getName() { return name; }

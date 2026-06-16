@@ -355,6 +355,7 @@ public List<CourseInfo> recommend(
     @GetMapping("/course/{id}")
     public List<Map<String, Object>>
         getCourseDetail(@PathVariable Integer id) {
+	    CourseInfo course = courseRepo.findById(id).orElse(null);
             // 1. 코스에 포함된 빵집 순서대로 가져오기
             List<CourseBakery> courseBakeries = courseBakeryRepo.findByCourseIdOrderBySequence(id);
 //	    List<CourseBakery> courseBakeries = courseBakeryRepo.findCourseBakeries(id);
@@ -370,7 +371,11 @@ public List<CourseInfo> recommend(
                 map.put("name", b.getName());
                 map.put("lat", b.getLat());
                 map.put("lng", b.getLng());
-                result.add(map);
+                if (course != null) {
+                    map.put("courseName", course.getName());
+                    map.put("courseDescription", course.getDescription());
+                }
+	        result.add(map);
             }
         }
         return result;

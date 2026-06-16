@@ -125,12 +125,10 @@ public class OdsayApiClient {
         }
     }
 
-    private void validateResponse(List<OdsayErrorResponse> errors, String methodName) {
-        if (errors == null || errors.isEmpty()) {
+    private void validateResponse(OdsayErrorResponse error, String methodName) {
+        if (error == null) {
             return;
         }
-
-        OdsayErrorResponse error = errors.get(0);
 
         throw new RouteCalculationException(
                 "ODsay API error in " + methodName

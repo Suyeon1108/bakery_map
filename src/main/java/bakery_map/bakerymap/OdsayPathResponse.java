@@ -5,76 +5,49 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-/**
- * ODsay searchPubTransPathT API 응답 매핑 Record
- *
- * 실제 ODsay 응답 구조:
- * {
- *   "result": {
- *     "path": [
- *       {
- *         "info": {
- *           "totalTime": 45,
- *           "totalDistance": 12000,
- *           "totalWalk": 500,
- *           "busTransitCount": 1,
- *           "subwayTransitCount": 0,
- *           "mapObj": "21:11:0@21:12:0"
- *         },
- *         "subPath": [
- *           {
- *             "trafficType": 2,
- *             "sectionTime": 30,
- *             "startName": "강남역",
- *             "endName": "신촌역",
- *             "lane": [{ "busNo": "147" }]
- *           },
- *           ...
- *         ]
- *       }
- *     ]
- *   }
- * }
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record OdsayPathResponse(
-        OdsayResult result,
-        List<OdsayErrorResponse> error
+        @JsonProperty("result") OdsayResult result,
+        @JsonProperty("error")  OdsayErrorResponse error
 ) {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record OdsayResult(
-            List<OdsayPath> path
+            @JsonProperty("path") List<OdsayPath> path
     ) {}
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record OdsayPath(
-            OdsayPathInfo info,
-            List<OdsaySubPath> subPath
+            @JsonProperty("info")    OdsayPathInfo info,
+            @JsonProperty("subPath") List<OdsaySubPath> subPath
     ) {}
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record OdsayPathInfo(
-        @JsonProperty("totalTime")          int totalTime,      // 총 소요 시간 (분)
-        @JsonProperty("totalDistance")      int totalDistance,  // 총 거리 (미터)
-        @JsonProperty("totalWalk")          int totalWalk,      // 총 도보 거리 (미터)
-        @JsonProperty("busTransitCount")    int busTransitCount,        // 버스 환승 횟수
-        @JsonProperty("subwayTransitCount") int subwayTransitCount,     // 지하철 환승 횟수
-        @JsonProperty("mapObj")             String mapObj       // loadLane 호출에 사용하는 식별자
+            @JsonProperty("totalTime")          int totalTime,
+            @JsonProperty("totalDistance")      int totalDistance,
+            @JsonProperty("totalWalk")          int totalWalk,
+            @JsonProperty("busTransitCount")    int busTransitCount,
+            @JsonProperty("subwayTransitCount") int subwayTransitCount,
+            @JsonProperty("mapObj")             String mapObj
     ) {}
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record OdsaySubPath(
-            int trafficType,        // 1=지하철, 2=버스, 3=도보
-            int sectionTime,        // 구간 소요 시간 (분)
-            String startName,       // 승차 정류소명
-            String endName,         // 하차 정류소명
-            List<OdsayLane> lane    // 노선 정보 (도보이면 null)
+            @JsonProperty("trafficType") int trafficType,
+            @JsonProperty("sectionTime") int sectionTime,
+            @JsonProperty("startName")   String startName,
+            @JsonProperty("endName")     String endName,
+            @JsonProperty("startX")      double startX,
+            @JsonProperty("startY")      double startY,
+            @JsonProperty("endX")        double endX,
+            @JsonProperty("endY")        double endY,
+            @JsonProperty("lane")        List<OdsayLane> lane
     ) {}
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record OdsayLane(
-            String name,   // 지하철 노선명
-            String busNo   // 버스 번호
+            @JsonProperty("name")  String name,
+            @JsonProperty("busNo") String busNo
     ) {}
 }

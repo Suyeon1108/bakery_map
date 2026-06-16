@@ -5,6 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record OdsayErrorResponse(
-        int code,
+        @JsonProperty("code") int code,
         @JsonProperty("msg") String message
 ) {}
